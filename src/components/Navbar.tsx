@@ -1,12 +1,41 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react"; // ✅ Import icons for mobile menu
+import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../supabase/client";
+import { User } from "@supabase/supabase-js"; // ✅ Import User type
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null); // ✅ Explicitly define User | null
+  const router = useRouter();
+
+  // ✅ Check if user is logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user || null); // ✅ Ensure correct type
+    };
+
+    checkUser();
+
+    // ✅ Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user || null); // ✅ Ensure correct type
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  // ✅ Logout function
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    router.push("/");
+  };
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -24,6 +53,30 @@ export default function Navbar() {
           <Link href="/education">Education</Link>
           <Link href="/citizen-science">Citizen Science</Link>
           <Link href="/economy">Economy</Link>
+
+          {/* ✅ Authenticated User Actions */}
+          {user ? (
+            <>
+              <Link href="/dashboard" className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition">
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                Login
+              </Link>
+              <Link href="/join-the-movement" className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                Sign Up
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* Hamburger Button for Mobile */}
@@ -45,6 +98,30 @@ export default function Navbar() {
             <Link href="/education" onClick={() => setIsOpen(false)}>Education</Link>
             <Link href="/citizen-science" onClick={() => setIsOpen(false)}>Citizen Science</Link>
             <Link href="/economy" onClick={() => setIsOpen(false)}>Economy</Link>
+
+            {/* ✅ Mobile Auth Actions */}
+            {user ? (
+              <>
+                <Link href="/dashboard" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg">
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => { handleLogout(); setIsOpen(false); }}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                  Login
+                </Link>
+                <Link href="/join-the-movement" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-green-500 text-white rounded-lg">
+                  Sign Up
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       )}

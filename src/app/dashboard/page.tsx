@@ -222,7 +222,7 @@ export default function Dashboard() {
         className="w-full p-2 border rounded-lg mt-1"
       />
 
-      {/* 🔹 Avatar Upload Input */}
+      {/* 🔹 Avatar Upload Input (THIS WAS MISSING!) */}
       <label className="block mt-4 text-gray-700">Profile Picture</label>
       <input
         type="file"
@@ -231,22 +231,22 @@ export default function Dashboard() {
         className="w-full p-2 border rounded-lg mt-1"
       />
 
-      {/* 🔹 Display Current Avatar */}
+      {/* 🔹 Show Current Avatar */}
       {profile?.avatar_url && (
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-4">
           <Image
             src={profile.avatar_url}
             alt="Profile Picture"
             width={100}
             height={100}
-            className="rounded-full mt-2"
+            className="rounded-full"
           />
         </div>
       )}
 
       {/* 🔹 Upload Avatar Button */}
       <button
-        onClick={() => updateProfile()}
+        onClick={updateProfile}
         className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full"
       >
         {loading ? "Uploading..." : "Upload New Avatar"}
@@ -271,6 +271,7 @@ export default function Dashboard() {
     </div>
   </div>
 )}
+
 
 
 

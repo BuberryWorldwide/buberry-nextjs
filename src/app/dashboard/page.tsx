@@ -25,6 +25,8 @@ export default function Dashboard() {
   const [newFullName, setNewFullName] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const [newBio, setNewBio] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
 
 
   useEffect(() => {
@@ -81,49 +83,69 @@ export default function Dashboard() {
   
 
   const updateProfile = async () => {
-    if (!user || !user.id || !user.email) {
-      alert("User is not authenticated");
-      return;
-    }
-  
+    if (!user) return;
     setLoading(true);
   
     try {
+      let avatarUrl = profile?.avatar_url || ""; // Keep old avatar if no new one is uploaded
+  
+      // ✅ Handle Avatar Upload
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split(".").pop();
+        const filePath = `${user.id}-${Date.now()}.${fileExt}`;
+  
+        // Upload avatar
+        const { data, error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, avatarFile);
+  
+        if (uploadError) throw uploadError;
+  
+        // ✅ Get Public URL for the uploaded avatar
+        const { data: publicUrlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
+  
+        if (publicUrlData) {
+          avatarUrl = publicUrlData.publicUrl;
+        } else {
+          throw new Error("Failed to retrieve avatar URL");
+        }
+      }
+  
+      // ✅ Ensure all required fields are populated
       const updates = {
-        id: user.id, // ✅ Ensure the correct user ID is used
-        email: user.email, // ✅ Ensure email is included (fix for the DB error)
+        id: user.id,
+        email: user.email, // Ensuring email is included
         full_name: newFullName || profile?.full_name || "",
         username: newUsername || profile?.username || "",
         bio: newBio || profile?.bio || "",
+        avatar_url: avatarUrl,
         updated_at: new Date().toISOString(),
       };
   
-      console.log("Updating profile with:", updates); // Debugging
-  
-      // ✅ Fix: `upsert()` must receive an array!
-      const { data, error } = await supabase
-        .from("profiles")
-        .upsert([updates]) // ✅ Wrapping in an array fixes TypeScript error
-        .select()
-        .single();
-  
+      // ✅ Update profile in Supabase
+      const { error } = await supabase.from("profiles").upsert(updates);
       if (error) throw error;
-      if (!data) throw new Error("Update failed: No data returned");
   
-      console.log("Profile updated in DB:", data); // Debugging
-  
-      // ✅ Update state to refresh UI immediately
-      setProfile(data);
+      // ✅ Refresh Profile Data
+      await fetchProfile(user.id);
   
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
-    } finally {
-      setLoading(false);
-    }
+  
+      // ✅ Ensure error is handled as an Error object
+      if (error instanceof Error) {
+          alert(`Failed to update profile: ${error.message}`);
+      } else {
+          alert("Failed to update profile due to an unknown error.");
+      }
+  }
+  
   };
+  
   
   
   
@@ -212,6 +234,16 @@ export default function Dashboard() {
                 onChange={(e) => setProfile({ ...profile, bio: e.target.value } as UserProfile)}
                 className="w-full p-2 border rounded-lg mt-1"
               />
+
+              {/* Avatar Upload */}
+              <label className="block mt-4 text-gray-700">Profile Picture</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+                className="w-full p-2 border rounded-lg mt-1"
+              />
+
 
               {/* Buttons */}
               <div className="flex justify-between mt-6">

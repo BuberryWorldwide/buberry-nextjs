@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { User } from "@supabase/supabase-js"; // Import the correct type
 
 type UserProfile = {
   full_name: string;
@@ -16,7 +17,7 @@ type UserProfile = {
 };
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);

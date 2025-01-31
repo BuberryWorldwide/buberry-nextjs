@@ -191,77 +191,87 @@ export default function Dashboard() {
 
 
         {/* 🔹 Profile Edit Modal */}
-        {isEditing && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-            <div className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-              <h2 className="text-2xl font-bold text-[#4FC3A1] text-center">Edit Profile</h2>
+{isEditing && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+    <div className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
+      <h2 className="text-2xl font-bold text-[#4FC3A1] text-center">Edit Profile</h2>
 
-              <label className="block mt-4 text-gray-700">Full Name</label>
-              <input
-                type="text"
-                value={profile?.full_name || ""}
-                onChange={(e) => setProfile({ ...profile, full_name: e.target.value } as UserProfile)}
-                className="w-full p-2 border rounded-lg mt-1"
-              />
+      {/* Full Name */}
+      <label className="block mt-4 text-gray-700">Full Name</label>
+      <input
+        type="text"
+        value={newFullName}
+        onChange={(e) => setNewFullName(e.target.value)}
+        className="w-full p-2 border rounded-lg mt-1"
+      />
 
-              <label className="block mt-4 text-gray-700">Username</label>
-              <input
-                type="text"
-                value={profile?.username || ""}
-                onChange={(e) => setProfile({ ...profile, username: e.target.value } as UserProfile)}
-                className="w-full p-2 border rounded-lg mt-1"
-              />
+      {/* Username */}
+      <label className="block mt-4 text-gray-700">Username</label>
+      <input
+        type="text"
+        value={newUsername}
+        onChange={(e) => setNewUsername(e.target.value)}
+        className="w-full p-2 border rounded-lg mt-1"
+      />
 
-              <label className="block mt-4 text-gray-700">Bio</label>
-              <textarea
-                value={profile?.bio || ""}
-                onChange={(e) => setProfile({ ...profile, bio: e.target.value } as UserProfile)}
-                className="w-full p-2 border rounded-lg mt-1"
-              />
+      {/* Bio */}
+      <label className="block mt-4 text-gray-700">Bio</label>
+      <textarea
+        value={newBio}
+        onChange={(e) => setNewBio(e.target.value)}
+        className="w-full p-2 border rounded-lg mt-1"
+      />
 
-             {/* Avatar Upload */}
-<label className="block mt-4 text-gray-700">Profile Picture</label>
-<input
-  type="file"
-  accept="image/*"
-  onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
-  className="w-full p-2 border rounded-lg mt-1"
-/>
+      {/* 🔹 Avatar Upload Input */}
+      <label className="block mt-4 text-gray-700">Profile Picture</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+        className="w-full p-2 border rounded-lg mt-1"
+      />
 
-{/* Display Current Avatar */}
-{profile?.avatar_url && (
-  <div className="flex justify-center">
-    <Image
-      src={profile.avatar_url}
-      alt="Profile Picture"
-      width={100}
-      height={100}
-      className="rounded-full mt-2"
-    />
+      {/* 🔹 Display Current Avatar */}
+      {profile?.avatar_url && (
+        <div className="flex justify-center">
+          <Image
+            src={profile.avatar_url}
+            alt="Profile Picture"
+            width={100}
+            height={100}
+            className="rounded-full mt-2"
+          />
+        </div>
+      )}
+
+      {/* 🔹 Upload Avatar Button */}
+      <button
+        onClick={() => updateProfile()}
+        className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full"
+      >
+        {loading ? "Uploading..." : "Upload New Avatar"}
+      </button>
+
+      {/* 🔹 Save & Cancel Buttons */}
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={updateProfile}
+          className="px-6 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition"
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Changes"}
+        </button>
+        <button
+          onClick={() => setIsEditing(false)}
+          className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 )}
 
-
-
-              {/* Buttons */}
-              <div className="flex justify-between mt-6">
-                <button
-                  onClick={() => updateProfile()}
-                  className="px-6 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition"
-                  disabled={loading}
-                >
-                  {loading ? "Saving..." : "Save Changes"}
-                </button>
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
 
         {/* 🔹 Wallet Section */}

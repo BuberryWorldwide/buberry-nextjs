@@ -86,11 +86,12 @@ export default function Login() {
 
         {/* Signup Link */}
         <p className="text-center text-gray-600 mt-6">
-          Don't have an account?{" "}
-          <a href="/join-the-movement" className="text-[#4FC3A1] font-semibold hover:underline">
-            Sign Up
-          </a>
-        </p>
+  Don&apos;t have an account?{" "}
+  <a href="/join-the-movement" className="text-[#4FC3A1] font-semibold hover:underline">
+    Sign Up
+  </a>
+</p>
+
       </div>
     </div>
   );

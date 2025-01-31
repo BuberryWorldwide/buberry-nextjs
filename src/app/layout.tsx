@@ -4,6 +4,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { supabase } from "../supabase/client";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import { useEffect } from "react"; // ✅ Remove `useState`
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

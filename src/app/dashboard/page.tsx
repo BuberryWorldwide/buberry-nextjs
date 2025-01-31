@@ -89,23 +89,20 @@ export default function Dashboard() {
     try {
       let avatarUrl = profile?.avatar_url || ""; // Keep old avatar if no new one is uploaded
   
-      // ✅ Handle Avatar Upload
+      // ✅ Upload Avatar If a New One is Selected
       if (avatarFile) {
         const fileExt = avatarFile.name.split(".").pop();
-        const filePath = `${user.id}-${Date.now()}.${fileExt}`;
+        const filePath = `avatars/${user.id}-${Date.now()}.${fileExt}`;
   
-        // Upload avatar
+        // Upload file to Supabase Storage
         const { data, error: uploadError } = await supabase.storage
           .from("avatars")
-          .upload(filePath, avatarFile);
+          .upload(filePath, avatarFile, { upsert: true });
   
         if (uploadError) throw uploadError;
   
-        // ✅ Get Public URL for the uploaded avatar
-        const { data: publicUrlData } = supabase.storage
-          .from("avatars")
-          .getPublicUrl(filePath);
-  
+        // ✅ Correctly Retrieve Public URL
+        const { data: publicUrlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
         if (publicUrlData) {
           avatarUrl = publicUrlData.publicUrl;
         } else {
@@ -113,10 +110,10 @@ export default function Dashboard() {
         }
       }
   
-      // ✅ Ensure all required fields are populated
+      // ✅ Ensure Required Fields Exist
       const updates = {
         id: user.id,
-        email: user.email, // Ensuring email is included
+        email: user.email, // Ensure email is included
         full_name: newFullName || profile?.full_name || "",
         username: newUsername || profile?.username || "",
         bio: newBio || profile?.bio || "",
@@ -124,27 +121,22 @@ export default function Dashboard() {
         updated_at: new Date().toISOString(),
       };
   
-      // ✅ Update profile in Supabase
+      // ✅ Update Profile in Supabase
       const { error } = await supabase.from("profiles").upsert(updates);
       if (error) throw error;
   
       // ✅ Refresh Profile Data
       await fetchProfile(user.id);
-  
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
-  
-      // ✅ Ensure error is handled as an Error object
-      if (error instanceof Error) {
-          alert(`Failed to update profile: ${error.message}`);
-      } else {
-          alert("Failed to update profile due to an unknown error.");
-      }
-  }
-  
+      alert(`Failed to update profile: ${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setLoading(false);
+    }
   };
+  
   
   
   

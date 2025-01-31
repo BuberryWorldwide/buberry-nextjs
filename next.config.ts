@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["scavtkmodjkcobqxdspc.supabase.co"], // ✅ Allow Supabase Storage
     remotePatterns: [
       {
         protocol: "https",

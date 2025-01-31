@@ -5,6 +5,7 @@ import { supabase } from "../../supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { User } from "@supabase/supabase-js"; // Import the correct type
+import ProfileAvatar from "../../components/ProfileAvatar";
 
 type UserProfile = {
   full_name: string;
@@ -15,6 +16,10 @@ type UserProfile = {
   carbon_points: number;
   staked_nfts: string[];
 };
+
+
+
+
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -89,20 +94,22 @@ export default function Dashboard() {
     try {
       let avatarUrl = profile?.avatar_url || ""; // Keep old avatar if no new one is uploaded
   
-      // ✅ Upload Avatar If a New One is Selected
       if (avatarFile) {
         const fileExt = avatarFile.name.split(".").pop();
-        const filePath = `avatars/${user.id}-${Date.now()}.${fileExt}`;
+        const filePath = `${user.id}-${Date.now()}.${fileExt}`;
   
-        // Upload file to Supabase Storage
+        // Upload avatar to Supabase Storage
         const { data, error: uploadError } = await supabase.storage
           .from("avatars")
-          .upload(filePath, avatarFile, { upsert: true });
+          .upload(filePath, avatarFile);
   
         if (uploadError) throw uploadError;
   
-        // ✅ Correctly Retrieve Public URL
-        const { data: publicUrlData } = supabase.storage.from("avatars").getPublicUrl(filePath);
+        // ✅ Get Public URL for the uploaded avatar
+        const { data: publicUrlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
+  
         if (publicUrlData) {
           avatarUrl = publicUrlData.publicUrl;
         } else {
@@ -110,35 +117,29 @@ export default function Dashboard() {
         }
       }
   
-      // ✅ Ensure Required Fields Exist
+      // ✅ Update profile with new avatar URL
       const updates = {
         id: user.id,
-        email: user.email, // Ensure email is included
         full_name: newFullName || profile?.full_name || "",
         username: newUsername || profile?.username || "",
         bio: newBio || profile?.bio || "",
-        avatar_url: avatarUrl,
+        avatar_url: avatarUrl, // ✅ Save new avatar
         updated_at: new Date().toISOString(),
       };
   
-      // ✅ Update Profile in Supabase
       const { error } = await supabase.from("profiles").upsert(updates);
       if (error) throw error;
   
-      // ✅ Refresh Profile Data
-      await fetchProfile(user.id);
+      await fetchProfile(user.id); // Refresh profile data
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert(`Failed to update profile: ${error instanceof Error ? error.message : "Unknown error"}`);
+      alert("Failed to update profile.");
     } finally {
       setLoading(false);
     }
   };
-  
-  
-  
   
   
   
@@ -166,36 +167,27 @@ export default function Dashboard() {
       </header>
 
       <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {/* 🔹 Profile Section */}
-<div className="bg-white shadow-md rounded-lg p-6 text-center w-full">
-          <h2 className="text-2xl font-bold text-[#4FC3A1]">Profile</h2>
+     {/* 🔹 Profile Section */}
+<div className="bg-white shadow-md rounded-lg p-6 text-center w-full max-w-md">
+  <h2 className="text-2xl font-bold text-[#4FC3A1]">Profile</h2>
 
-          {/* Avatar */}
-          {profile?.avatar_url ? (
-            <Image
-              src={profile.avatar_url}
-              alt="Profile Picture"
-              width={100}
-              height={100}
-              className="mx-auto rounded-full mt-4"
-            />
-          ) : (
-            <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mt-4"></div>
-          )}
+  {/* ✅ Modular Profile Avatar Component */}
+  <ProfileAvatar avatarPath={profile?.avatar_url || ""} />
 
-          {/* User Info */}
-          <p className="mt-2 text-lg font-semibold">{profile?.full_name || "User"}</p>
-          <p className="text-gray-600">{profile?.bio || "No bio added yet"}</p>
-          <p className="text-sm text-gray-500 mt-2">Email: {user?.email}</p>
+  {/* User Info */}
+  <p className="mt-2 text-lg font-semibold">{profile?.full_name || "User"}</p>
+  <p className="text-gray-600">{profile?.bio || "No bio added yet"}</p>
+  <p className="text-sm text-gray-500 mt-2">Email: {user?.email}</p>
 
-          {/* 🔹 Edit Profile Button */}
-          <button
-            onClick={() => setIsEditing(true)}
-            className="mt-4 px-4 py-2 bg-[#6C4C94] text-white rounded-lg hover:bg-[#543875] transition"
-          >
-            Edit Profile
-          </button>
-        </div>
+  {/* 🔹 Edit Profile Button */}
+  <button
+    onClick={() => setIsEditing(true)}
+    className="mt-4 px-4 py-2 bg-[#6C4C94] text-white rounded-lg hover:bg-[#543875] transition"
+  >
+    Edit Profile
+  </button>
+</div>
+
 
 
         {/* 🔹 Profile Edit Modal */}
@@ -227,14 +219,28 @@ export default function Dashboard() {
                 className="w-full p-2 border rounded-lg mt-1"
               />
 
-              {/* Avatar Upload */}
-              <label className="block mt-4 text-gray-700">Profile Picture</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
-                className="w-full p-2 border rounded-lg mt-1"
-              />
+             {/* Avatar Upload */}
+<label className="block mt-4 text-gray-700">Profile Picture</label>
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
+  className="w-full p-2 border rounded-lg mt-1"
+/>
+
+{/* Display Current Avatar */}
+{profile?.avatar_url && (
+  <div className="flex justify-center">
+    <Image
+      src={profile.avatar_url}
+      alt="Profile Picture"
+      width={100}
+      height={100}
+      className="rounded-full mt-2"
+    />
+  </div>
+)}
+
 
 
               {/* Buttons */}

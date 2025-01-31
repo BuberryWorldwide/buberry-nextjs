@@ -1,39 +1,28 @@
 import Image from "next/image";
-import { supabase } from "../supabase/client";
-import { useEffect, useState } from "react";
 
-export default function ProfileAvatar({ avatarPath }: { avatarPath: string }) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+type ProfileAvatarProps = {
+  avatarPath: string;
+};
 
-  useEffect(() => {
-    if (!avatarPath) return;
-  
-    console.log("Avatar Path:", avatarPath);
-  
-    // ✅ Use the public URL instead of signed URL
-    const { data } = supabase.storage.from("avatars").getPublicUrl(avatarPath);
-  
-    if (data?.publicUrl) {
-      setImageUrl(data.publicUrl);
-    } else {
-      console.error("Failed to retrieve public URL");
-    }
-  }, [avatarPath]);
-  
+export default function ProfileAvatar({ avatarPath }: ProfileAvatarProps) {
+  if (!avatarPath) {
+    return (
+      <div className="w-24 h-24 flex items-center justify-center bg-gray-300 rounded-full text-2xl font-bold">
+        ?
+      </div>
+    );
+  }
 
   return (
-    <div className="relative w-24 h-24 mx-auto">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt="Profile Avatar"
-          width={100}
-          height={100}
-          className="rounded-full"
-        />
-      ) : (
-        <div className="w-24 h-24 bg-gray-300 rounded-full" />
-      )}
+    <div className="relative w-24 h-24 rounded-full overflow-hidden">
+      <Image
+        src={avatarPath}
+        alt="Profile Avatar"
+        width={96} // or your desired width
+        height={96} // or your desired height
+        className="rounded-full"
+        unoptimized // This bypasses Next.js image optimization
+      />
     </div>
   );
 }

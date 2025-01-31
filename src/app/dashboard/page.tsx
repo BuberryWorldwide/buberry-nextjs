@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchUserSession = async () => {
-      // Destructure directly to get session, avoiding an unused "data" variable.
+      // Destructure directly to get the session.
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         setUser(session.user);
@@ -61,7 +61,9 @@ export default function Dashboard() {
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, email, full_name, username, bio, avatar_url, hedera_wallet, carbon_points, staked_nfts")
+        .select(
+          "id, email, full_name, username, bio, avatar_url, hedera_wallet, carbon_points, staked_nfts"
+        )
         .eq("id", userId)
         .single();
 
@@ -90,7 +92,7 @@ export default function Dashboard() {
         const fileExt = avatarFile.name.split(".").pop();
         const filePath = `${user.id}-${Date.now()}.${fileExt}`;
 
-        // Upload avatar to Supabase Storage and ignore the returned "data" since we don't need it.
+        // Upload avatar to Supabase Storage
         const { error: uploadError } = await supabase.storage
           .from("avatars")
           .upload(filePath, avatarFile);
@@ -109,25 +111,37 @@ export default function Dashboard() {
         }
       }
 
-      // Update profile with new avatar URL.
+      // Build the update payload.
+      // Adjust fields as necessary based on your profiles table schema.
       const updates = {
         id: user.id,
+        // Include email if required.
+        email: profile?.email || user.email,
         full_name: newFullName || profile?.full_name || "",
         username: newUsername || profile?.username || "",
         bio: newBio || profile?.bio || "",
         avatar_url: avatarUrl,
+        hedera_wallet: profile?.hedera_wallet || "", // default to empty string if missing
+        carbon_points: profile?.carbon_points ?? 0,    // default to 0 if missing
+        staked_nfts: profile?.staked_nfts || [],        // default to empty array if missing
         updated_at: new Date().toISOString(),
       };
 
+      // Log the update payload for debugging.
+      console.log("Update payload:", updates);
+
       const { error } = await supabase.from("profiles").upsert(updates);
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating profile (upsert):", error);
+        throw error;
+      }
 
       await fetchProfile(user.id); // Refresh profile data.
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      alert("Failed to update profile. Please check the console for details.");
     } finally {
       setLoading(false);
     }

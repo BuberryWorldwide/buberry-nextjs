@@ -8,6 +8,8 @@ import { User } from "@supabase/supabase-js";
 import ProfileAvatar from "../../components/ProfileAvatar";
 
 type UserProfile = {
+  id: string;
+  email: string; // ✅ Add this
   full_name: string;
   username: string;
   bio: string;
@@ -16,6 +18,7 @@ type UserProfile = {
   carbon_points: number;
   staked_nfts: string[];
 };
+
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);

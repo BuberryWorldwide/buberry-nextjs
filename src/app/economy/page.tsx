@@ -50,7 +50,7 @@ export default function Economy() {
             { title: "🌍 Real-World Impact", desc: "Every transaction supports on-the-ground sustainability efforts." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -69,7 +69,7 @@ export default function Economy() {
             { title: "🛒 Spend in the Ecosystem", desc: "Buberry Coin can be used to buy NFTs, access exclusive content, and support regenerative projects." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}

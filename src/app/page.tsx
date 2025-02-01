@@ -58,7 +58,7 @@ export default function Home() {
               whileHover={{ scale: 1.1 }} 
               className="p-6 w-64 bg-gray-100 shadow-lg rounded-lg cursor-pointer hover:bg-green-50 transition"
             >
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </motion.div>
           ))}

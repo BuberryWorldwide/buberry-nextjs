@@ -49,7 +49,7 @@ export default function HowItWorks() {
             { title: "🎮 Gamified Impact", desc: "Stake assets in a strategic staking game that translates in-game progress into real-world sustainability efforts." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -68,7 +68,7 @@ export default function HowItWorks() {
             { title: "🎖 Earn Rewards", desc: "Earn stakeable NFTs, tokens, and in-game assets for completing lessons and applying knowledge." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -87,7 +87,7 @@ export default function HowItWorks() {
             { title: "🎯 Earn & Contribute", desc: "Verified contributions generate gameplay rewards and fund real-world sustainability initiatives." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}

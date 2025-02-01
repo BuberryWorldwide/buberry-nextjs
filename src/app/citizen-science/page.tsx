@@ -50,7 +50,7 @@ export default function CitizenScience() {
             { title: "🎖 Earn Rewards", desc: "Verified contributions are rewarded with stakeable NFTs, in-game assets, and Buberry tokens." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -70,7 +70,7 @@ export default function CitizenScience() {
             { title: "✅ Verify & Earn", desc: "Once verified, your contribution earns NFTs, in-game staking power, or tradable tokens." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -89,7 +89,7 @@ export default function CitizenScience() {
             { title: "🌎 Boost Sustainability Projects", desc: "Use your data rewards to fund on-the-ground regenerative agriculture initiatives." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}

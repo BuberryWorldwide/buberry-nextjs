@@ -48,16 +48,18 @@ export default function Join() {
       </Head>
 
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center h-screen text-center px-4">
-        <div className="absolute inset-0">
-          <Image 
-            src="/hero-image.png" 
-            alt="Hero Background" 
-            fill 
-            className="object-cover opacity-75"
-          />
-        </div>
-        <div className="absolute inset-0 bg-black/40"></div>
+            <section className="relative flex flex-col items-center justify-center h-screen text-center px-4 bg-gradient-to-b from-[#4FC3A1] to-[#6C4C94]">
+              {/* Background Image */}
+              <Image 
+                src="/hero-image.png" 
+                alt="Hero Background" 
+                fill 
+                style={{ objectFit: "cover" }}
+                className="absolute inset-0 z-0 opacity-25"
+              />
+      
+              {/* Overlay for Readability */}
+              <div className="absolute inset-0 bg-black/40 z-0"></div>
         <div className="relative z-10">
           <h1 className="text-6xl font-extrabold text-white drop-shadow-lg">Join the Movement</h1>
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">
@@ -67,7 +69,7 @@ export default function Join() {
       </section>
 
       {/* Signup Section */}
-      <section className="py-16 bg-white text-center">
+      <section className="py-16 bg-[#fafafa] text-center">
         <h2 className="text-4xl font-bold text-[#4FC3A1]">Sign Up & Get Started</h2>
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Create an account to access Buberry’s features, track your impact, and earn rewards.

@@ -47,19 +47,19 @@ export default function BeyondCarbon() {
         <h2 className="text-3xl font-bold text-[#4FC3A1]">How Buberry Goes Beyond</h2>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">Inclusive & Scalable Participation</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">Inclusive & Scalable Participation</h3>
             <p className="mt-2 text-gray-700">
               Unlike traditional carbon markets that favor corporations, Buberry allows <b>farmers, communities, and individuals</b> to actively engage in sustainability efforts.
             </p>
           </div>
           <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">Gamified Impact & Rewards</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">Gamified Impact & Rewards</h3>
             <p className="mt-2 text-gray-700">
               Users <b>stake NFTs & tokens</b> to participate, take action, and earn rewards that can be reinvested into further sustainability efforts.
             </p>
           </div>
           <div className="p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">Multi-Metric Regeneration</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">Multi-Metric Regeneration</h3>
             <p className="mt-2 text-gray-700">
               Beyond CO₂, Buberry tracks <b>biodiversity, soil health, water retention, and food production</b> as part of a truly regenerative system.
             </p>
@@ -75,25 +75,25 @@ export default function BeyondCarbon() {
         </p>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
           <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">📚 Learn-to-Earn</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">📚 Learn-to-Earn</h3>
             <p className="mt-2 text-gray-700">
               Complete courses on sustainability and regenerative agriculture to unlock NFT rewards and ecosystem tokens.
             </p>
           </div>
           <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">🎮 Staking & Participation</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">🎮 Staking & Participation</h3>
             <p className="mt-2 text-gray-700">
               Stake assets to fund real-world sustainability projects and receive verified impact-based rewards.
             </p>
           </div>
           <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">🌍 Citizen Science Contributions</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">🌍 Citizen Science Contributions</h3>
             <p className="mt-2 text-gray-700">
               Help track biodiversity, soil health, and ecosystem improvements while earning incentives.
             </p>
           </div>
           <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-            <h3 className="text-xl font-bold text-[#4FC3A1]">💰 Regenerative Economy</h3>
+            <h3 className="text-xl font-bold text-[#6A4C94]">💰 Regenerative Economy</h3>
             <p className="mt-2 text-gray-700">
               Tokens and NFTs provide access to resources, tools, and further educational opportunities.
             </p>

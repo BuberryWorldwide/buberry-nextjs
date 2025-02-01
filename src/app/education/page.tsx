@@ -49,7 +49,7 @@ export default function Education() {
             { title: "🔗 Web3 & Sustainability", desc: "Discover how blockchain and tokenization can drive funding for regenerative projects." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -68,7 +68,7 @@ export default function Education() {
             { title: "🎮 Unlock New Gameplay Features", desc: "Some in-game mechanics require educational progress to access advanced staking strategies." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-white rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}
@@ -87,7 +87,7 @@ export default function Education() {
             { title: "✅ Community Validation", desc: "Courses are peer-reviewed and validated through on-chain reputation systems." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold text-[#4FC3A1]">{item.title}</h3>
+              <h3 className="text-xl font-bold text-[#6A4C94]">{item.title}</h3>
               <p className="mt-2 text-gray-700">{item.desc}</p>
             </div>
           ))}

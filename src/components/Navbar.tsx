@@ -39,9 +39,9 @@ export default function Navbar() {
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container mx-auto flex items-center justify-between p-4">
+      <div className="container mx-auto flex items-center justify-between p-2">
         <div className="flex items-center space-x-3">
-          <Image src="/OGO_A_Transparaent.svg" alt="Buberry Logo" width={60} height={60} />
+          <Image src="/OGO_A_Transparaent.svg" alt="Buberry Logo" width={90} height={70} />
           <h1 className="text-2xl font-bold text-[#4FC3A1]">Buberry Worldwide</h1>
         </div>
 
@@ -69,10 +69,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+              <Link href="/login" className="px-4 py-2 bg-[#6A4C94] text-white rounded-lg hover:bg-[#522a8a] transition">
                 Login
               </Link>
-              <Link href="/join-the-movement" className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+              <Link href="/join-the-movement" className="px-4 py-2 bg-[#6AD4B0] text-white rounded-lg hover:bg-[#319070] transition">
                 Sign Up
               </Link>
             </>
@@ -114,10 +114,10 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link href="/login" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-blue-500 text-white rounded-lg">
+                <Link href="/login" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-[#6A4C94] text-white rounded-lg ">
                   Login
                 </Link>
-                <Link href="/join-the-movement" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-green-500 text-white rounded-lg">
+                <Link href="/join-the-movement" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-[#6AD4B0] text-white rounded-lg hover:bg-[#319070] transition">
                   Sign Up
                 </Link>
               </>

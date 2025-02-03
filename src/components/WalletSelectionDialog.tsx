@@ -1,9 +1,7 @@
 import { Button, Dialog, Stack } from "@mui/material";
-import { connectToMetamask } from "../services/wallets/metamask/metamaskClient";
-import { openWalletConnectModal } from "../services/wallets/walletconnect/walletConnectClient";
-import MetamaskLogo from "../assets/metamask-logo.svg";
-import WalletConnectLogo from "../assets/walletconnect-logo.svg";
-
+import { connectToMetamask } from "../../services/wallets/metamask/metamaskClient";
+import { openWalletConnectModal } from "../../services/wallets/walletconnect/walletConnectClient";
+import Image from "next/image"; 
 
 interface WalletSelectionDialogProps {
   open: boolean;
@@ -11,46 +9,53 @@ interface WalletSelectionDialogProps {
   onClose: (value: string) => void;
 }
 
-export const WalletSelectionDialog = (props: WalletSelectionDialogProps) => {
-  const { onClose, open, setOpen } = props;
-
+export const WalletSelectionDialog = ({ open, setOpen, onClose }: WalletSelectionDialogProps) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <Stack p={2} gap={1}>
+        {/* WalletConnect Button */}
         <Button
           variant="contained"
           onClick={() => {
-            openWalletConnectModal()
+            openWalletConnectModal();
             setOpen(false);
           }}
+          sx={{
+            backgroundColor: "#0a74da", // ✅ Custom background color
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#085aa3", // ✅ Darker shade on hover
+            },
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
         >
-          <img
-            src={WalletConnectLogo}
-            alt='walletconnect logo'
-            className='walletLogoImage'
-            style={{
-              marginLeft: '-6px'
-            }}
-          />
+          <Image src="/assets/walletconnect-logo.svg" alt="WalletConnect Logo" width={24} height={24} />
           WalletConnect
         </Button>
+
+        {/* Metamask Button */}
         <Button
           variant="contained"
           onClick={() => {
             connectToMetamask();
           }}
+          sx={{
+            backgroundColor: "#f6851b", // ✅ Custom background color for Metamask
+            color: "white",
+            "&:hover": {
+              backgroundColor: "#c75b0e", // ✅ Darker shade on hover
+            },
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
         >
-          <img
-            src={MetamaskLogo}
-            alt='metamask logo'
-            className='walletLogoImage'
-            style={{
-              padding: '4px 4px 4px 0px'
-            }}
-          />
+          <Image src="/assets/metamask-logo.svg" alt="Metamask Logo" width={24} height={24} />
           Metamask
         </Button>
       </Stack>
     </Dialog>
   );
-}
+};

@@ -7,8 +7,8 @@ import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 
 import { WalletSelectionDialog } from "../../components/WalletSelectionDialog"; // Import the Wallet Selection Component
-import { useWalletInterface } from "../../../services/wallets/useWalletInterface"; // Import Wallet Interface
 import ProfileAvatar from "../../components/ProfileAvatar";
+import { useWalletInterface } from "../../../services/wallets/useWalletInterface";
 
 type UserProfile = {
   
@@ -315,7 +315,7 @@ export default function Dashboard() {
           >
             {accountId ? `Connected: ${accountId}` : "Connect Wallet"}
           </button>
-          
+
           <WalletSelectionDialog
             open={isWalletDialogOpen}
             setOpen={setIsWalletDialogOpen}

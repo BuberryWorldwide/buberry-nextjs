@@ -5,6 +5,9 @@ import { supabase } from "../../supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { User } from "@supabase/supabase-js";
+
+import { WalletSelectionDialog } from "../../components/WalletSelectionDialog"; // Import the Wallet Selection Component
+import { useWalletInterface } from "../../../services/wallets/useWalletInterface"; // Import Wallet Interface
 import ProfileAvatar from "../../components/ProfileAvatar";
 
 type UserProfile = {
@@ -31,6 +34,9 @@ export default function Dashboard() {
   const [newUsername, setNewUsername] = useState("");
   const [newBio, setNewBio] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  const { accountId, walletInterface } = useWalletInterface(); // Get wallet account ID
+  const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false); // Wallet connect dialog state
 
   useEffect(() => {
     const fetchUserSession = async () => {
@@ -84,6 +90,39 @@ export default function Dashboard() {
       console.error("Error fetching profile:", error);
     }
   };
+
+  useEffect(() => {
+    if (accountId) {
+      saveWalletToProfile(accountId); // Auto-save wallet when connected
+    }
+  }, [accountId]);
+  
+
+  const connectWallet = async () => {
+    if (accountId) {
+      console.log("Wallet already connected:", accountId);
+      return;
+    }
+    setIsWalletDialogOpen(true);
+  };
+  
+  const saveWalletToProfile = async (walletAddress: string) => {
+    if (!user || !walletAddress) return;
+  
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ hedera_wallet: walletAddress })
+        .eq("id", user.id);
+  
+      if (error) throw error;
+      console.log("Wallet address saved successfully:", walletAddress);
+      fetchProfile(user.id);
+    } catch (error) {
+      console.error("Error saving wallet to profile:", error);
+    }
+  };
+  
 
   const updateProfile = async () => {
     if (!user) return;
@@ -270,9 +309,19 @@ export default function Dashboard() {
         <div className="bg-white shadow-md rounded-lg p-6 text-center">
           <h2 className="text-2xl font-bold text-[#4FC3A1]">Hedera Wallet</h2>
           <p className="mt-2 text-lg">{profile?.hedera_wallet || "No wallet connected"}</p>
-          <button className="mt-4 px-4 py-2 bg-[#6C4C94] text-white rounded-lg hover:bg-[#543875] transition">
-            Connect Wallet
+          <button 
+            onClick={connectWallet}
+            className="mt-4 px-4 py-2 bg-[#6C4C94] text-white rounded-lg hover:bg-[#543875] transition"
+          >
+            {accountId ? `Connected: ${accountId}` : "Connect Wallet"}
           </button>
+          
+          <WalletSelectionDialog
+            open={isWalletDialogOpen}
+            setOpen={setIsWalletDialogOpen}
+            onClose={() => setIsWalletDialogOpen(false)}
+          />
+
         </div>
 
         {/* Carbon Points & Staked NFTs */}

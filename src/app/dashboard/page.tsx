@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../supabase/client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 import ProfileAvatar from "../../components/ProfileAvatar";
@@ -29,7 +29,6 @@ export default function Dashboard() {
   const [newUsername, setNewUsername] = useState("");
   const [newBio, setNewBio] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-
   useEffect(() => {
     const fetchUserSession = async () => {
       const { data: session, error: sessionError } = await supabase.auth.getSession();
@@ -45,6 +44,19 @@ export default function Dashboard() {
     };
 
     fetchUserSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        setUser(session.user);
+        fetchProfile(session.user.id);
+      } else {
+        router.push("/login");
+      }
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
   }, [router]);
 
   const fetchProfile = async (userId: string) => {
@@ -55,11 +67,27 @@ export default function Dashboard() {
         .eq("id", userId)
         .single();
 
-      if (error) throw error;
+      if (error && error.code === "PGRST116") {
+        console.log("Profile does not exist, creating new profile...");
+        await supabase.from("profiles").upsert({
+          id: userId,
+          email: user?.email || "",
+          full_name: "",
+          username: "",
+          bio: "",
+          avatar_url: "",
+          hedera_wallet: "",
+          carbon_points: 0,
+          staked_nfts: [],
+        });
+      } else if (error) {
+        throw error;
+      }
+
       setProfile(data);
-      setNewFullName(data.full_name || "");
-      setNewUsername(data.username || "");
-      setNewBio(data.bio || "");
+      setNewFullName(data?.full_name || "");
+      setNewUsername(data?.username || "");
+      setNewBio(data?.bio || "");
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
@@ -134,49 +162,6 @@ export default function Dashboard() {
             Edit Profile
           </button>
         </div>
-
-        {isEditing && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-            <div className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
-              <h2 className="text-2xl font-bold text-[#4FC3A1] text-center">Edit Profile</h2>
-              <label className="block mt-4 text-gray-700">Full Name</label>
-              <input type="text" value={newFullName} onChange={(e) => setNewFullName(e.target.value)}
-                className="w-full p-2 border rounded-lg mt-1" />
-
-              <label className="block mt-4 text-gray-700">Username</label>
-              <input type="text" value={newUsername} onChange={(e) => setNewUsername(e.target.value)}
-                className="w-full p-2 border rounded-lg mt-1" />
-
-              <label className="block mt-4 text-gray-700">Bio</label>
-              <textarea value={newBio} onChange={(e) => setNewBio(e.target.value)}
-                className="w-full p-2 border rounded-lg mt-1" />
-
-              <label className="block mt-4 text-gray-700">Profile Picture</label>
-              <input type="file" accept="image/*" onChange={(e) => setAvatarFile(e.target.files?.[0] || null)}
-                className="w-full p-2 border rounded-lg mt-1" />
-
-              {profile?.avatar_url && (
-                <div className="flex justify-center mt-4">
-                  <Image src={profile.avatar_url} alt="Profile Picture" width={100} height={100} className="rounded-full" />
-                </div>
-              )}
-
-              <button onClick={updateProfile}
-                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full">
-                {loading ? "Uploading..." : "Upload New Avatar"}
-              </button>
-
-              <div className="flex justify-between mt-6">
-                <button onClick={updateProfile} className="px-6 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition" disabled={loading}>
-                  {loading ? "Saving..." : "Save Changes"}
-                </button>
-                <button onClick={() => setIsEditing(false)} className="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         <button onClick={handleLogout} className="mt-6 px-6 py-3 bg-red-500 text-white font-semibold rounded-lg shadow-lg hover:bg-red-600 transition">
           Log Out

@@ -5,7 +5,7 @@ import { supabase } from "../../../supabase/client";
 
 function OAuthHandler() {
   const router = useRouter();
-  const params = useSearchParams(); // Wrapped inside Suspense
+  const params = useSearchParams();
 
   useEffect(() => {
     const completeSignIn = async () => {
@@ -30,19 +30,30 @@ function OAuthHandler() {
       console.log("OAuth Login Successful:", user);
 
       // ✅ Check if user exists before inserting profile
-      const { data: existingProfile } = await supabase
+      const { data: existingProfile, error: fetchError } = await supabase
         .from("profiles")
         .select("id")
         .eq("id", user.id)
         .single();
 
+      if (fetchError) {
+        console.error("Error checking profile existence:", fetchError);
+      }
+
       if (!existingProfile) {
+        console.log("Creating new profile for user...");
         const { error: profileError } = await supabase
           .from("profiles")
           .upsert({
             id: user.id,
             email: user.email,
             full_name: user.user_metadata?.full_name || "",
+            username: user.user_metadata?.preferred_username || "",
+            bio: "",
+            avatar_url: "",
+            hedera_wallet: "",
+            carbon_points: 0,
+            staked_nfts: [],
           });
 
         if (profileError) {
@@ -51,7 +62,7 @@ function OAuthHandler() {
           return;
         }
       } else {
-        console.log("User already exists in profiles.");
+        console.log("User profile already exists.");
       }
 
       router.push("/dashboard");
@@ -63,7 +74,6 @@ function OAuthHandler() {
   return <div>Completing sign-in...</div>;
 }
 
-// ✅ Fix: Wrap `useSearchParams()` inside Suspense to prevent prerendering issues
 export default function AuthCallback() {
   return (
     <Suspense fallback={<div>Loading authentication...</div>}>

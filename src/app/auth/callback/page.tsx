@@ -1,14 +1,16 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../supabase/client";
 
-export default function AuthCallback() {
+function OAuthHandler() {
   const router = useRouter();
-  const params = useSearchParams();
+  const params = useSearchParams(); // Wrapped inside Suspense
 
   useEffect(() => {
     const completeSignIn = async () => {
+      console.log("AuthCallback params:", params.toString());
+
       const error = params.get("error");
       if (error) {
         console.error("OAuth Error:", error, params.get("error_description"));
@@ -27,19 +29,29 @@ export default function AuthCallback() {
       const user = data.session.user;
       console.log("OAuth Login Successful:", user);
 
-      // ✅ Force insert the user into `profiles` if missing
-      const { error: profileError } = await supabase
+      // ✅ Check if user exists before inserting profile
+      const { data: existingProfile } = await supabase
         .from("profiles")
-        .upsert({
-          id: user.id,
-          email: user.email,
-          full_name: user.user_metadata?.full_name || "",
-        });
+        .select("id")
+        .eq("id", user.id)
+        .single();
 
-      if (profileError) {
-        console.error("Error saving profile:", profileError);
-        alert("Database error: Failed to save user profile.");
-        return;
+      if (!existingProfile) {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .upsert({
+            id: user.id,
+            email: user.email,
+            full_name: user.user_metadata?.full_name || "",
+          });
+
+        if (profileError) {
+          console.error("Error saving profile:", profileError);
+          alert("Database error: Failed to save user profile.");
+          return;
+        }
+      } else {
+        console.log("User already exists in profiles.");
       }
 
       router.push("/dashboard");
@@ -49,4 +61,13 @@ export default function AuthCallback() {
   }, [router, params]);
 
   return <div>Completing sign-in...</div>;
+}
+
+// ✅ Fix: Wrap `useSearchParams()` inside Suspense to prevent prerendering issues
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={<div>Loading authentication...</div>}>
+      <OAuthHandler />
+    </Suspense>
+  );
 }

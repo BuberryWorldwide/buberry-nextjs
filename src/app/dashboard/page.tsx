@@ -8,6 +8,7 @@ import { User } from "@supabase/supabase-js";
 import ProfileAvatar from "../../components/ProfileAvatar";
 
 type UserProfile = {
+  
   id: string;
   email: string; // ✅ Add this
   full_name: string;

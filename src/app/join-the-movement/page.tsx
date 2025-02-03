@@ -35,7 +35,9 @@ export default function Join() {
   const handleOAuthLogin = async (provider: "google") => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { 
+        redirectTo: `${window.location.origin}/auth/callback`,  // Redirect to a dedicated OAuth handler
+      },
     });
     if (error) alert(error.message);
   };

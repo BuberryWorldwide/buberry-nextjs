@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (
@@ -32,10 +32,10 @@ export default function Home() {
         <div className="relative z-10">
           <h1 className="text-6xl font-extrabold text-white drop-shadow-lg">Regenerative Agriculture Meets Web3</h1>
           <p className="mt-4 text-xl text-gray-300 drop-shadow-md">Grow, Stake, Regenerate – Earn rewards while supporting real-world sustainability.</p>
-          < Link href= "/join-the-movement">
-          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-            Join the Movement
-          </button>
+          <Link href="/join-the-movement">
+            <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              Join the Movement
+            </button>
           </Link>
         </div>
       </section>
@@ -77,18 +77,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 bg-[#6C4C94] text-white text-center">
-        <h3 className="text-xl font-bold"><b>Buberry Worldwide</b></h3>
-        <p className="mt-4">Transforming sustainability through blockchain-powered regenerative agriculture.</p>
-        <div className="mt-6 space-x-4">
-          <a href="/beyond-carbon" className="hover:underline">Beyond Carbon</a>
-          <a href="/how-it-works" className="hover:underline">How It Works</a>
-          <a href="/education" className="hover:underline">Education</a>
-          <a href="/citizen-science" className="hover:underline">Citizen Science</a>
-          <a href="/economy" className="hover:underline">Economy</a>
-        </div>
-        <p className="mt-6">Email: bu@buberryworldwide.com</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

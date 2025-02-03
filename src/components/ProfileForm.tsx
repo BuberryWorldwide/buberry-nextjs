@@ -12,43 +12,63 @@ export default function ProfileForm({ user }: { user: UserProfile }) {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Fetch Profile only if user is defined
   useEffect(() => {
-    if (!user?.id) return; // ✅ Ensure user exists before fetching
+    if (!user?.id) return;
 
     const fetchProfile = async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("full_name")
-        .eq("id", user.id)
-        .single();
+      try {
+        let { data, error } = await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", user.id)
+          .single();
 
-      if (error) {
-        console.error("Error fetching profile:", error);
-      } else {
+        if (error && error.code === "PGRST116") {
+          console.log("No profile found, creating one...");
+
+          // ✅ If no profile exists, create a new one
+          const { error: insertError } = await supabase.from("profiles").insert({
+            id: user.id,
+            full_name: "", // Default empty
+          });
+
+          if (insertError) throw insertError;
+          console.log("Profile created!");
+
+          // ✅ Fetch again after creating
+          ({ data, error } = await supabase
+            .from("profiles")
+            .select("full_name")
+            .eq("id", user.id)
+            .single());
+        }
+
+        if (error) throw error;
         setFullName(data?.full_name || "");
+      } catch (err) {
+        console.error("Error fetching/creating profile:", err);
       }
     };
 
     fetchProfile();
   }, [user]);
 
-  // ✅ Update profile in Supabase
   const handleUpdate = async () => {
-    if (!user?.id) return; // ✅ Ensure user exists before updating
-
+    if (!user?.id) return;
     setLoading(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({ full_name: fullName })
-      .eq("id", user.id);
 
-    setLoading(false);
-    if (error) {
-      console.error("Error updating profile:", error);
-      alert("Error updating profile.");
-    } else {
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert({ id: user.id, full_name: fullName }); // ✅ Use `upsert` to create if missing
+
+      if (error) throw error;
       alert("Profile updated!");
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Error updating profile.");
+    } finally {
+      setLoading(false);
     }
   };
 

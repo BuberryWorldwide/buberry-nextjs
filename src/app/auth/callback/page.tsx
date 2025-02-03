@@ -1,30 +1,52 @@
 "use client";
-
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../supabase/client";
 
 export default function AuthCallback() {
   const router = useRouter();
+  const params = useSearchParams();
 
   useEffect(() => {
     const completeSignIn = async () => {
-      const { data, error } = await supabase.auth.getSession();
-
-      if (error || !data.session) {
-        console.error("Authentication failed:", error);
-        router.push("/login"); // Redirect back to login if it fails
-      } else {
-        router.push("/dashboard"); // ✅ Redirect to dashboard after successful login
+      const error = params.get("error");
+      if (error) {
+        console.error("OAuth Error:", error, params.get("error_description"));
+        alert(`OAuth Failed: ${params.get("error_description")}`);
+        router.push("/login");
+        return;
       }
+
+      const { data, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError || !data.session) {
+        console.error("Authentication failed:", sessionError);
+        alert("Authentication failed. Please try again.");
+        return;
+      }
+
+      const user = data.session.user;
+      console.log("OAuth Login Successful:", user);
+
+      // ✅ Force insert the user into `profiles` if missing
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .upsert({
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || "",
+        });
+
+      if (profileError) {
+        console.error("Error saving profile:", profileError);
+        alert("Database error: Failed to save user profile.");
+        return;
+      }
+
+      router.push("/dashboard");
     };
 
     completeSignIn();
-  }, [router]);
+  }, [router, params]);
 
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <p className="text-lg text-gray-700">Logging in...</p>
-    </div>
-  );
+  return <div>Completing sign-in...</div>;
 }

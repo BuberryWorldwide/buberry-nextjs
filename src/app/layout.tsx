@@ -7,6 +7,8 @@ import "./globals.css";
 import { useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js"; // ✅ Import User type
 import { WalletProvider } from "../../contexts/WalletContext";
+import { Analytics } from "@vercel/analytics/react"
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -51,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="antialiased">
         <WalletProvider>
+        <Analytics/>
         <Navbar />
         <main className="flex-grow">{children}</main>
         <footer className="py-10 bg-[#6C4C94] text-white text-center">

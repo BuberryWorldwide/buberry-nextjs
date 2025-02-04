@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Footer from "../components/Footer";
+import GetStartedButton from "@/components/GetStartedButton";
 
 export default function Home() {
   return (
@@ -71,9 +72,9 @@ export default function Home() {
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Be part of the regenerative revolution—earn rewards, learn, and contribute to real-world sustainability.
         </p>
-        <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-          Get Started
-        </button>
+        <GetStartedButton />
+
+
       </section>
 
       {/* Footer */}

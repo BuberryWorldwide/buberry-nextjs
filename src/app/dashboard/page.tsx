@@ -23,10 +23,11 @@ type UserProfile = {
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isFetching, setIsFetching] = useState(false); // ✅ Prevents redundant API calls
   const router = useRouter();
   const { accountId, setAccountId, connectMetamask, connectWalletConnect } = useWallet();
 
-  // ✅ FIX: Added `user` to dependency array
+  // ✅ FIX: Run fetchUserSession only once on mount
   useEffect(() => {
     const fetchUserSession = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -36,30 +37,24 @@ export default function Dashboard() {
       }
 
       if (!data.session) {
-        console.warn("⚠️ No active session found. Skipping profile fetch.");
+        console.warn("⚠️ No active session found. Redirecting to login.");
+        router.push("/join-the-movement");
         return;
       }
 
-      if (data.session.user.id !== user?.id) {
-        console.warn("⚠️ New user detected. Clearing previous wallet connection.");
-        localStorage.removeItem("hedera-wallet");
-        setAccountId(null);
-
-        try {
-          await walletConnectWallet.disconnect();
-        } catch (err) {
-          console.error("❌ Error disconnecting WalletConnect:", err);
+      setUser((prevUser) => {
+        if (prevUser?.id !== data.session?.user.id) {
+          console.warn("⚠️ New user detected. Clearing previous wallet connection.");
+          localStorage.removeItem("hedera-wallet");
+          setAccountId(null);
         }
-      }
+        return data.session.user;
+      });
 
-      if (!user || data.session.user.id !== user.id) {
-        console.log("✅ User session found:", data.session);
-        setUser(data.session.user);
-        fetchProfile(data.session.user.id);
-      }
+      fetchProfile(data.session.user.id);
     };
 
-    fetchUserSession();
+    fetchUserSession(); // ✅ Runs once when component mounts
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
@@ -67,7 +62,7 @@ export default function Dashboard() {
         setUser(null);
         setAccountId(null);
         router.push("/join-the-movement");
-      } else {
+      } else if (!user) {
         setUser(session.user);
         fetchProfile(session.user.id);
       }
@@ -76,27 +71,29 @@ export default function Dashboard() {
     return () => {
       authListener?.subscription.unsubscribe(); 
     };
-  }, [user, setAccountId, router]); // ✅ FIX: `user` added to dependency array
+  }, [setAccountId, router]); // ✅ Removed `user` from dependency array
 
+  // ✅ FIX: Prevents multiple API calls for profile
   const fetchProfile = async (userId: string) => {
+    if (isFetching) return; // ✅ Avoid duplicate calls
+    setIsFetching(true);
+
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, email, full_name, username, bio, avatar_url, hedera_wallet, carbon_points, staked_nfts")
+        .select("*")
         .eq("id", userId)
         .single();
 
       if (error) throw error;
-      if (!data) throw new Error("No profile found for user");
-
-      console.log("✅ Fetched profile data:", data);
       setProfile(data);
+      console.log("✅ Fetched profile data:", data);
     } catch (error) {
       console.error("❌ Error fetching profile:", error);
+    } finally {
+      setIsFetching(false);
     }
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">

@@ -5,7 +5,7 @@ import { supabase } from "../../supabase/client";
 import { useRouter } from "next/navigation";
 import ProfileAvatar from "../../components/ProfileAvatar";
 import { useWallet } from "../../../contexts/WalletContext"; 
-import { walletConnectWallet } from "../../../services/wallets/walletconnect/walletConnectClient";
+// import { walletConnectWallet } from "../../../services/wallets/walletconnect/walletConnectClient";
 import { User } from "@supabase/supabase-js";
 
 type UserProfile = {

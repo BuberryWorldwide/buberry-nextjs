@@ -1,30 +1,41 @@
-import { useContext } from "react"
+import { useState, useEffect, useContext } from "react";
 import { MetamaskContext } from "../../contexts/MetamaskContext";
 import { WalletConnectContext } from "../../contexts/WalletConnectContext";
 import { metamaskWallet } from "./metamask/metamaskClient";
 import { walletConnectWallet } from "./walletconnect/walletConnectClient";
 
-// Purpose: This hook is used to determine which wallet interface to use
-// Example: const { accountId, walletInterface } = useWalletInterface();
-// Returns: { accountId: string | null, walletInterface: WalletInterface | null }
-export const useWalletInterface = () => {
+type WalletInterface = typeof metamaskWallet | typeof walletConnectWallet | null;
+
+interface WalletData {
+  accountId: string | null;
+  walletInterface: WalletInterface;
+}
+
+// ✅ Ensure wallets only load on client
+export const useWalletInterface = (): WalletData => {
   const metamaskCtx = useContext(MetamaskContext);
   const walletConnectCtx = useContext(WalletConnectContext);
 
-  if (metamaskCtx.metamaskAccountAddress) {
-    return {
-      accountId: metamaskCtx.metamaskAccountAddress,
-      walletInterface: metamaskWallet
-    };
-  } else if (walletConnectCtx.accountId) {
-    return {
-      accountId: walletConnectCtx.accountId,
-      walletInterface: walletConnectWallet
+  const [walletData, setWalletData] = useState<WalletData>({
+    accountId: null,
+    walletInterface: null,
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (metamaskCtx?.metamaskAccountAddress) {
+        setWalletData({
+          accountId: metamaskCtx.metamaskAccountAddress || null, // ✅ Ensure accountId can be null
+          walletInterface: metamaskWallet || null, // ✅ Ensure walletInterface can be null
+        });
+      } else if (walletConnectCtx?.accountId) {
+        setWalletData({
+          accountId: walletConnectCtx.accountId || null, // ✅ Ensure accountId can be null
+          walletInterface: walletConnectWallet || null, // ✅ Ensure walletInterface can be null
+        });
+      }
     }
-  } else {
-    return {
-      accountId: null,
-      walletInterface: null
-    };
-  }
-}
+  }, [metamaskCtx?.metamaskAccountAddress, walletConnectCtx?.accountId]);
+
+  return walletData;
+};

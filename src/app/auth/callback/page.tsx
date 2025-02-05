@@ -1,74 +1,38 @@
-
 "use client";
-import { useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "../../../supabase/client";
 
-function OAuthHandler() {
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { supabase } from "../../../supabase/client";
+import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+
+function AuthCallbackHandler() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const params = useSearchParams(); // Wrapped inside Suspense
 
   useEffect(() => {
-    const completeSignIn = async () => {
-      console.log("AuthCallback params:", params.toString());
-
-      const error = params.get("error");
-      if (error) {
-        console.error("OAuth Error:", error, params.get("error_description"));
-        alert(`OAuth Failed: ${params.get("error_description")}`);
-        router.push("/login");
-        return;
-      }
-
-      const { data, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !data.session) {
-        console.error("Authentication failed:", sessionError);
-        alert("Authentication failed. Please try again.");
-        return;
-      }
-
-      const user = data.session.user;
-      console.log("OAuth Login Successful:", user);
-
-      // ✅ Check if user exists before inserting profile
-      const { data: existingProfile } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("id", user.id)
-        .single();
-
-      if (!existingProfile) {
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .upsert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || "",
-          });
-
-        if (profileError) {
-          console.error("Error saving profile:", profileError);
-          alert("Database error: Failed to save user profile.");
-          return;
+    const processOAuth = async () => {
+      const code = searchParams.get("code");
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (!error) {
+          router.push("/profile"); // ✅ Redirect to Profile after login
+        } else {
+          console.error("OAuth error:", error);
         }
-      } else {
-        console.log("User already exists in profiles.");
       }
-
-      router.push("/dashboard");
     };
+    processOAuth();
+  }, [searchParams, router]);
 
-    completeSignIn();
-  }, [router, params]);
-
-  return <div>Completing sign-in...</div>;
+  return <p className="text-center">Processing login...</p>;
 }
 
-// ✅ Fix: Wrap `useSearchParams()` inside Suspense to prevent prerendering issues
-export default function AuthCallback() {
+// ✅ Wrap in <Suspense> to prevent Next.js CSR error
+export default function AuthCallbackPage() {
   return (
-    <Suspense fallback={<div>Loading authentication...</div>}>
-      <OAuthHandler />
+    <Suspense fallback={<p className="text-center">Loading authentication...</p>}>
+      <AuthCallbackHandler />
     </Suspense>
   );
 }

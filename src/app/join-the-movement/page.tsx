@@ -11,17 +11,26 @@ export default function Join() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  // Redirect if user is already logged in
+  // ✅ Redirect to Profile if User is Already Logged In
   useEffect(() => {
+    let isMounted = true; // ✅ Prevents unmounted state errors
+
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
-      if (data.user) {
-        router.push("/dashboard");
+      if (data.user && isMounted) {
+        console.log("✅ User is already logged in. Redirecting to profile...");
+        router.push("/profile"); // ✅ Redirects to Profile Page
       }
     };
+
     checkUser();
+
+    return () => {
+      isMounted = false; // ✅ Cleanup function
+    };
   }, [router]);
 
+  // ✅ Email Signup Function
   const handleEmailSignup = async () => {
     setMessage("");
     const { error } = await supabase.auth.signInWithOtp({ email });
@@ -32,11 +41,12 @@ export default function Join() {
     }
   };
 
+  // ✅ OAuth Login Function (Google)
   const handleOAuthLogin = async (provider: "google") => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { 
-        redirectTo: `${window.location.origin}/auth/callback`,  // Redirect to a dedicated OAuth handler
+        redirectTo: `${window.location.origin}/profile`, // ✅ Fix: Redirect to Profile
       },
     });
     if (error) alert(error.message);
@@ -50,18 +60,15 @@ export default function Join() {
       </Head>
 
       {/* Hero Section */}
-            <section className="relative flex flex-col items-center justify-center h-screen text-center px-4 bg-gradient-to-b from-[#4FC3A1] to-[#6C4C94]">
-              {/* Background Image */}
-              <Image 
-                src="/hero-image.png" 
-                alt="Hero Background" 
-                fill 
-                style={{ objectFit: "cover" }}
-                className="absolute inset-0 z-0 opacity-25"
-              />
-      
-              {/* Overlay for Readability */}
-              <div className="absolute inset-0 bg-black/40 z-0"></div>
+      <section className="relative flex flex-col items-center justify-center h-screen text-center px-4 bg-gradient-to-b from-[#4FC3A1] to-[#6C4C94]">
+        <Image 
+          src="/hero-image.png" 
+          alt="Hero Background" 
+          fill 
+          style={{ objectFit: "cover" }}
+          className="absolute inset-0 z-0 opacity-25"
+        />
+        <div className="absolute inset-0 bg-black/40 z-0"></div>
         <div className="relative z-10">
           <h1 className="text-6xl font-extrabold text-white drop-shadow-lg">Join the Movement</h1>
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">

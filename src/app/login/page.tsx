@@ -15,7 +15,7 @@ export default function Login() {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
-        router.push("/dashboard");
+        router.push("/profile");
       }
     };
     checkUser();

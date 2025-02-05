@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -6,34 +6,13 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../supabase/client";
 import { User } from "@supabase/supabase-js"; // ✅ Import User type
 
-export default function Navbar() {
+export default function Navbar({ user }: { user: User | null }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null); // ✅ Explicitly define User | null
   const router = useRouter();
-
-  // ✅ Check if user is logged in
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user || null); // ✅ Ensure correct type
-    };
-
-    checkUser();
-
-    // ✅ Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user || null); // ✅ Ensure correct type
-    });
-
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, []);
 
   // ✅ Logout function
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setUser(null);
     router.push("/");
   };
 
@@ -57,12 +36,12 @@ export default function Navbar() {
           {/* ✅ Authenticated User Actions */}
           {user ? (
             <>
-              <Link href="/dashboard" className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition">
-                Dashboard
+              <Link href="/profile" className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg hover:bg-[#3C9C7B] transition">
+                Profile
               </Link>
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                className="px-4 py-2 bg-[#6A4C94] text-white rounded-lg hover:bg-red-600 transition"
               >
                 Logout
               </button>
@@ -102,12 +81,12 @@ export default function Navbar() {
             {/* ✅ Mobile Auth Actions */}
             {user ? (
               <>
-                <Link href="/dashboard" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg">
-                  Dashboard
+                <Link href="/profile" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-[#4FC3A1] text-white rounded-lg">
+                  Profile
                 </Link>
                 <button
                   onClick={() => { handleLogout(); setIsOpen(false); }}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                  className="px-4 py-2 bg-[#6A4C94] text-white rounded-lg"
                 >
                   Logout
                 </button>

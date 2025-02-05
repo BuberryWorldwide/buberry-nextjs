@@ -73,8 +73,6 @@ export default function Home() {
           Be part of the regenerative revolution—earn rewards, learn, and contribute to real-world sustainability.
         </p>
         <GetStartedButton />
-
-
       </section>
 
       {/* Footer */}

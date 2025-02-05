@@ -33,7 +33,7 @@ export default function GetStartedButton() {
 
   const handleClick = () => {
     if (session) {
-      router.push("/dashboard"); // Redirect logged-in users
+      router.push("/profile"); // Redirect logged-in users
     } else {
       router.push("/how-it-works"); // Redirect guests
     }

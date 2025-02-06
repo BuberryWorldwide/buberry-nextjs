@@ -156,7 +156,7 @@ export default function ProfilePage() {
             <div className="bg-white shadow-md rounded-lg p-6">
               <h2 className="text-2xl font-bold text-[#4FC3A1]">Quick Access</h2>
               <ul className="mt-4 space-y-3">
-                <li><a href="https://lms.buberryworldwide.com" className="block p-3 bg-blue-500 text-white rounded-lg">📚 LMS Dashboard</a></li>
+                <li><a href="https://lms.buberryworldwide.com/dashboard" className="block p-3 bg-blue-500 text-white rounded-lg">📚 LMS Dashboard</a></li>
                 <li><a href="https://omnia.buberryworldwide.com" className="block p-3 bg-green-500 text-white rounded-lg">🌱 Staking Dashboard</a></li>
                 <li><a href="https://citizen-science.buberryworldwide.com" className="block p-3 bg-purple-500 text-white rounded-lg">🔬 Citizen Science</a></li>
               </ul>

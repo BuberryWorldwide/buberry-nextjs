@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Education() {
   return (
@@ -30,9 +31,11 @@ export default function Education() {
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">
             Buberry’s <b>Learning System</b> rewards users for expanding their knowledge of regenerative practices and sustainability.
           </p>
-          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-            Start Learning
-          </button>
+          <Link href="https://lms.buberryworldwide.com">
+            <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              Start Learning
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -73,6 +76,11 @@ export default function Education() {
             </div>
           ))}
         </div>
+        <Link href="https://lms.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3C9C7B] transition">
+            Browse Courses
+          </button>
+        </Link>
       </section>
 
       {/* Buberry’s Open Knowledge System */}
@@ -100,9 +108,11 @@ export default function Education() {
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Join Buberry’s education platform and take the first step toward <b>regenerative knowledge and real-world impact</b>.
         </p>
-        <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-          Browse Courses
-        </button>
+        <Link href="https://lms.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+            Explore Buberry LMS
+          </button>
+        </Link>
       </section>
     </div>
   );

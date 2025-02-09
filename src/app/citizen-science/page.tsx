@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CitizenScience() {
   return (
@@ -30,9 +31,11 @@ export default function CitizenScience() {
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">
             Buberry empowers communities to <b>track, verify, and contribute environmental data</b>, creating a decentralized sustainability network.
           </p>
-          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-            Get Involved
-          </button>
+          <Link href="https://citizen.buberryworldwide.com">
+            <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              Get Involved
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -75,6 +78,11 @@ export default function CitizenScience() {
             </div>
           ))}
         </div>
+        <Link href="https://citizen.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3C9C7B] transition">
+            Start Contributing
+          </button>
+        </Link>
       </section>
 
       {/* Citizen Science & Gamification */}
@@ -102,9 +110,11 @@ export default function CitizenScience() {
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Join Buberry’s citizen science movement and help track <b>real-world environmental impact</b> while earning rewards.
         </p>
-        <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-          Join Citizen Science
-        </button>
+        <Link href="https://citizen.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+            Join Citizen Science
+          </button>
+        </Link>
       </section>
     </div>
   );

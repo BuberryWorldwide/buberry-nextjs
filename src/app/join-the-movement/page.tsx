@@ -1,57 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "../../supabase/client";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Join() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const router = useRouter();
-
-  // ✅ Redirect to Profile if User is Already Logged In
-  useEffect(() => {
-    let isMounted = true; // ✅ Prevents unmounted state errors
-
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      if (data.user && isMounted) {
-        console.log("✅ User is already logged in. Redirecting to profile...");
-        router.push("/profile"); // ✅ Redirects to Profile Page
-      }
-    };
-
-    checkUser();
-
-    return () => {
-      isMounted = false; // ✅ Cleanup function
-    };
-  }, [router]);
-
-  // ✅ Email Signup Function
-  const handleEmailSignup = async () => {
-    setMessage("");
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage("Check your email for the login link!");
-    }
-  };
-
-  // ✅ OAuth Login Function (Google)
-  const handleOAuthLogin = async (provider: "google") => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { 
-        redirectTo: `${window.location.origin}/profile`, // ✅ Fix: Redirect to Profile
-      },
-    });
-    if (error) alert(error.message);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <Head>
@@ -59,7 +12,7 @@ export default function Join() {
         <meta name="description" content="Join Buberry and be part of a regenerative future." />
       </Head>
 
-      {/* Hero Section */}
+      {/* 🌿 Hero Section */}
       <section className="relative flex flex-col items-center justify-center h-screen text-center px-4 bg-gradient-to-b from-[#4FC3A1] to-[#6C4C94]">
         <Image 
           src="/hero-image.png" 
@@ -77,50 +30,36 @@ export default function Join() {
         </div>
       </section>
 
-      {/* Signup Section */}
+      {/* 🚀 Signup Section - Redirects to Central Auth */}
       <section className="py-16 bg-[#fafafa] text-center">
         <h2 className="text-4xl font-bold text-[#4FC3A1]">Sign Up & Get Started</h2>
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Create an account to access Buberry’s features, track your impact, and earn rewards.
         </p>
 
-        {/* Signup Form */}
+        {/* ✅ Redirect Buttons */}
         <div className="mt-8 flex flex-col items-center space-y-4">
-          {/* Email Signup */}
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="p-3 border border-gray-300 rounded-lg w-80 text-center shadow-sm focus:outline-none focus:ring-2 focus:ring-[#4FC3A1]"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button
-            onClick={handleEmailSignup}
-            className="px-6 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition"
-          >
-            Sign Up with Email
-          </button>
-          {message && <p className="mt-2 text-lg text-gray-600">{message}</p>}
+          <Link href="https://auth.buberryworldwide.com/auth/signup">
+            <button className="px-6 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              📝 Sign Up
+            </button>
+          </Link>
 
-          {/* Divider */}
           <div className="flex items-center w-80">
             <hr className="flex-grow border-t border-gray-300" />
             <span className="px-4 text-gray-600">or</span>
             <hr className="flex-grow border-t border-gray-300" />
           </div>
 
-          {/* OAuth Login */}
-          <button
-            onClick={() => handleOAuthLogin("google")}
-            className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition flex items-center space-x-3"
-          >
-            <Image src="/google-icon.svg" alt="Google Logo" width={20} height={20} />
-            <span>Continue with Google</span>
-          </button>
+          <Link href="https://auth.buberryworldwide.com/auth/login">
+            <button className="px-6 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3BA58D] transition">
+              🔐 Log In
+            </button>
+          </Link>
         </div>
       </section>
 
-      {/* Why Join Buberry? */}
+      {/* 🌎 Why Join Buberry? */}
       <section className="py-16 bg-gray-100 text-center">
         <h2 className="text-4xl font-bold text-[#4FC3A1]">Why Join Buberry?</h2>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">

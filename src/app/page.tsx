@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Footer from "../components/Footer";
-import GetStartedButton from "@/components/GetStartedButton";
 
 export default function Home() {
   return (
@@ -15,9 +14,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      {/* Hero Section */}
+      {/* 🌿 Hero Section */}
       <section className="relative flex flex-col items-center justify-center h-screen text-center px-4 bg-gradient-to-b from-[#4FC3A1] to-[#6C4C94]">
-        {/* Background Image */}
+        {/* ✅ Background Image */}
         <Image 
           src="/hero-image.png" 
           alt="Hero Background" 
@@ -26,13 +25,15 @@ export default function Home() {
           className="absolute inset-0 z-0 opacity-25"
         />
 
-        {/* Overlay for Readability */}
+        {/* ✅ Overlay for Readability */}
         <div className="absolute inset-0 bg-black/40 z-0"></div>
 
-        {/* Content */}
+        {/* ✅ Content */}
         <div className="relative z-10">
           <h1 className="text-6xl font-extrabold text-white drop-shadow-lg">Regenerative Agriculture Meets Web3</h1>
-          <p className="mt-4 text-xl text-gray-300 drop-shadow-md">Grow, Stake, Regenerate – Earn rewards while supporting real-world sustainability.</p>
+          <p className="mt-4 text-xl text-gray-300 drop-shadow-md">
+            Grow, Stake, Regenerate – Earn rewards while supporting real-world sustainability.
+          </p>
           <Link href="/join-the-movement">
             <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
               Join the Movement
@@ -41,7 +42,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Interactive Explainer Section */}
+      {/* 🚀 How Buberry Works */}
       <section className="py-16 bg-white text-center">
         <h2 className="text-4xl font-bold text-[#4FC3A1]">How Buberry Works</h2>
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
@@ -66,16 +67,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* 🔗 Call to Action */}
       <section className="py-16 bg-gray-100 text-center">
-        <h2 className="text-4xl font-bold text-[#4FC3A1]">Join Buberry Today</h2>
+        <h2 className="text-4xl font-bold text-[#4FC3A1]">Get Started with Buberry</h2>
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
-          Be part of the regenerative revolution—earn rewards, learn, and contribute to real-world sustainability.
+          Join our movement and be part of the regenerative future.
         </p>
-        <GetStartedButton />
+        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href="https://auth.buberryworldwide.com/auth/login">
+            <button className="btn btn-primary">🔐 Log In</button>
+          </Link>
+          <Link href="https://auth.buberryworldwide.com/auth/signup">
+            <button className="btn btn-accent">📝 Sign Up</button>
+          </Link>
+        </div>
       </section>
 
-      {/* Footer */}
+      {/* 📜 Footer */}
       <Footer />
     </div>
   );

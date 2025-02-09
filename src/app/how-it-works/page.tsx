@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HowItWorks() {
   return (
@@ -30,9 +31,11 @@ export default function HowItWorks() {
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">
             Buberry is a <b>real-world regenerative economy</b> that integrates education, citizen science, and tokenized incentives.
           </p>
-          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-            Get Involved
-          </button>
+          <Link href="/join-the-movement">
+            <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              Get Involved
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -73,6 +76,11 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
+        <Link href="/education">
+          <button className="mt-6 px-8 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3C9C7B] transition">
+            Start Learning
+          </button>
+        </Link>
       </section>
 
       {/* Citizen Science */}
@@ -92,6 +100,11 @@ export default function HowItWorks() {
             </div>
           ))}
         </div>
+        <Link href="/citizen-science">
+          <button className="mt-6 px-8 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3C9C7B] transition">
+            Contribute Data
+          </button>
+        </Link>
       </section>
 
       {/* Gamified Staking */}
@@ -100,9 +113,11 @@ export default function HowItWorks() {
         <p className="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">
           Players <b>stake character and item NFTs</b> in <b>strategic combinations</b> to <b>enhance sustainability projects</b> and <b>gain in-game advantages</b>.
         </p>
-        <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-          Learn More
-        </button>
+        <Link href="/economy">
+          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+            Learn More
+          </button>
+        </Link>
       </section>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Economy() {
   return (
@@ -30,9 +31,11 @@ export default function Economy() {
           <p className="mt-4 text-xl text-gray-200 max-w-3xl">
             Buberry combines <b>gameplay, real-world incentives, and digital finance</b> to drive sustainability.
           </p>
-          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-            Explore the Economy
-          </button>
+          <Link href="https://economy.buberryworldwide.com">
+            <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+              Explore the Economy
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -46,7 +49,7 @@ export default function Economy() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           {[
             { title: "🔄 Circular Economy", desc: "Every token and NFT has utility—whether in gameplay, education, or real-world funding." },
-            { title: "💰 Buberry Coin", desc: "The currency that fuels the system—usable for learning, staking, sustainability investments." },
+            { title: "💰 Buberry Coin", desc: "The currency that fuels the system—usable for learning, staking, and sustainability investments." },
             { title: "🌍 Real-World Impact", desc: "Every transaction supports on-the-ground sustainability efforts." }
           ].map((item, index) => (
             <div key={index} className="p-6 bg-gray-100 rounded-lg shadow-md">
@@ -74,6 +77,11 @@ export default function Economy() {
             </div>
           ))}
         </div>
+        <Link href="https://economy.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#4FC3A1] text-white font-semibold rounded-lg shadow-lg hover:bg-[#3C9C7B] transition">
+            Learn More About Buberry Coin
+          </button>
+        </Link>
       </section>
 
       {/* Bridging the Digital & Real-World Economy */}
@@ -83,9 +91,11 @@ export default function Economy() {
           Buberry ensures that <b>gameplay benefits the real world</b>.  
           Users can <b>stake assets to fund sustainability projects</b> or use Buberry Coin for <b>real-world transactions</b>.
         </p>
-        <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
-          Join the Buberry Economy
-        </button>
+        <Link href="https://omnia.buberryworldwide.com">
+          <button className="mt-6 px-8 py-3 bg-[#6C4C94] text-white font-semibold rounded-lg shadow-lg hover:bg-[#543875] transition">
+            Explore Staking & Sustainability
+          </button>
+        </Link>
       </section>
     </div>
   );
